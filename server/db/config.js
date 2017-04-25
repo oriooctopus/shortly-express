@@ -44,8 +44,8 @@ module.exports = (db) => {
       return db.queryAsync(`
         CREATE TABLE IF NOT EXISTS sessions (
           id INTEGER NOT NULL AUTO_INCREMENT,
-          user_id INTEGER NOT NULL UNIQUE,
-          hash INTEGER NOT NULL,
+          user_id INTEGER,
+          hash VARCHAR(60) NOT NULL,
           timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
           PRIMARY KEY (id)
         ); `);

@@ -44,7 +44,6 @@ class Users extends Model {
         return false;
       }
       var newPass = utils.decrypt(result.password);
-      console.log('this is the password', newPass);
       if (data.password === newPass) {
         return true;
       } else {

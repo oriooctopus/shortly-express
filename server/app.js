@@ -5,6 +5,7 @@ const partials = require('express-partials');
 const bodyParser = require('body-parser');
 const Auth = require('./middleware/auth');
 const models = require('./models');
+const cookieParser = require('./middleware/cookieParser');
 
 const app = express();
 
@@ -97,7 +98,6 @@ app.post('/signup', (req, res, next) => {
   })
 
   .then(function() {
-    console.log('done!');
     next();
   });
 
@@ -123,8 +123,10 @@ app.post('/login', (req, res, next) => {
 });
 
 app.get('/login', (req, res, next) => {
+  // if user has cookie
 
-  // redirect to / if user has cookie
+  // else 
+  cookieParser(req, res, next);
 });
 
 
