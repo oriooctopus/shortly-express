@@ -28,6 +28,29 @@ module.exports = (db) => {
   /************************************************************/
   /*          Add additional schema queries here              */
   /************************************************************/
+    .then(() => {
+      return db.queryAsync(`
+        CREATE TABLE IF NOT EXISTS users (
+          id INTEGER NOT NULL AUTO_INCREMENT,
+          username VARCHAR(50) NOT NULL UNIQUE,
+          password VARCHAR(50) NOT NULL,
+          timestamp DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+          PRIMARY KEY (id)
+        ); `);
+
+    })
+
+    .then(() => {
+      return db.queryAsync(`
+        CREATE TABLE IF NOT EXISTS sessions (
+          id INTEGER NOT NULL AUTO_INCREMENT,
+          user_id INTEGER NOT NULL UNIQUE,
+          hash INTEGER NOT NULL,
+          timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          PRIMARY KEY (id)
+        ); `);
+    })
+
 
     .error(err => {
       console.log(err);

@@ -8,6 +8,7 @@ const models = require('./models');
 
 const app = express();
 
+
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
 app.use(partials());
@@ -80,6 +81,51 @@ app.post('/links',
 // Write your authentication routes here
 /************************************************************/
 
+app.post('/signup', (req, res, next) => {
+
+  var data = req.body;
+
+  models.Users.usernameExists(data.username)
+
+  .then(function(exists) {
+    if (!exists) {
+      models.Users.addUser(data);
+      return res.redirect('/');
+    } else {
+      res.redirect('/signup');
+    }
+  })
+
+  .then(function() {
+    console.log('done!');
+    next();
+  });
+
+});
+
+app.post('/login', (req, res, next) => {
+
+  var data = req.body;
+
+  models.Users.checkCredentials(data)
+
+  .then(function(result) {
+    if (result) {
+      res.redirect('/');
+      // generate a new hash for them in the sessions table
+    } else {
+      res.redirect('/login');
+    }
+    next();
+  })
+
+
+});
+
+app.get('/login', (req, res, next) => {
+
+  // redirect to / if user has cookie
+});
 
 
 /************************************************************/
