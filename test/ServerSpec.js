@@ -375,7 +375,7 @@ describe('', function() {
       });
     });
 
-    describe('Session Parser', function() {
+    xdescribe('Session Parser', function() {
       it('initializes a new session when there are no cookies on the request', function(done) {
         var requestWithoutCookies = httpMocks.createRequest();
         var response = httpMocks.createResponse();
@@ -396,6 +396,7 @@ describe('', function() {
         createSession(requestWithoutCookie, response, function() {
           var cookies = response.cookies;
           expect(cookies['shortlyid']).to.exist;
+          console.log('here are cookies, baked fresh', cookies.shortlyid);
           expect(cookies['shortlyid'].value).to.exist;
           done();
         });
@@ -414,6 +415,7 @@ describe('', function() {
 
           createSession(requestWithCookies, secondResponse, function() {
             var session = requestWithCookies.session;
+
             expect(session).to.be.an('object');
             expect(session.hash).to.exist;
             expect(session.hash).to.be.cookie;
@@ -452,6 +454,12 @@ describe('', function() {
             var hash = requestWithoutCookie.session.hash;
             db.query('UPDATE sessions SET user_id = ? WHERE hash = ?', [userId, hash], function(error, result) {
 
+              db.query('SELECT * from sessions', function(error, result) {
+                console.log('this is what the table looks like now', result);
+              })
+
+
+              console.log('the result of the update', result);
               var secondResponse = httpMocks.createResponse();
               var requestWithCookies = httpMocks.createRequest();
               requestWithCookies.cookies.shortlyid = hash;
@@ -459,6 +467,7 @@ describe('', function() {
               createSession(requestWithCookies, secondResponse, function() {
                 var session = requestWithCookies.session;
                 expect(session).to.be.an('object');
+                console.log('this is session username', session.username, 'this is the actual username', username);
                 expect(session.username).to.be.username;
                 expect(session.user_id).to.be.userId;
                 done();
@@ -517,7 +526,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Sessions and cookies', function() {
+  describe('Sessions and cookies', function() {
     var requestWithSession;
     var cookieJar;
 

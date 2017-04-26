@@ -5,14 +5,21 @@ const Model = require('./model');
 
 class Sessions extends Model {
 
-  addSession(hash) {
-    this.create({ hash: hash });
+  addSession(browser) {
+    var newHash = utils.encrypt(String(Math.random()));
+    // adds to the database
+    var newSess = { hash: newHash };
+    console.log('this is the broser', browser);
+    this.create({ hash: newHash, browser: browser });
+    // returns what was added!
+    return newSess;
   }
 
   checkSession(hash) {
 
   }
 
+
 }
 
-module.exports = new Sessions('session');
+module.exports = new Sessions('sessions');
